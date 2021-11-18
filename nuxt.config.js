@@ -30,9 +30,9 @@ export default {
     ],
     script: [
       {
-        src: "/js/media.js",
+        // src: "/js/media.js",
         // mode: 'client',
-        defer: true,
+        // defer: true,
       },
     ],
   },
@@ -49,13 +49,13 @@ export default {
   /*
    ** Global CSS
    */
-  css: [
-    // '~/assets/css/animate.css'
-  ],
+  css: ["element-ui/lib/theme-chalk/index.css"],
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
+    "~/plugins/element-ui/element-ui",
+
     // { src: '~/static/js/media.js',
     //   mode: 'client',
     //   defer: true
@@ -87,6 +87,7 @@ export default {
         });
       }
     },
+    vendor: ["element-ui"],
   },
   generate: {
     dir: process.env.NODE_ENV === "prod" ? "dist/prod" : "dist/test",

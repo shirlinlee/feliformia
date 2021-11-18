@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper" id="index">
     <h1 class="f_grey">貓毛輪值線上表單</h1>
-    <a class="btn" href="regular.html">飲食及便便紀錄</a>
-    <a class="btn" href="medicine.html">餵藥及特殊飲食紀錄</a>
+    <NuxtLink class="btn" to="/regular">飲食及便便紀錄</NuxtLink>
+    <NuxtLink class="btn" to="/medicine">餵藥及特殊飲食紀錄</NuxtLink>
   </div>
 </template>
 

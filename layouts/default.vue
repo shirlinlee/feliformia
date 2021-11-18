@@ -1,10 +1,19 @@
 <template>
   <div>
     <nuxt />
-    <NuxtLogo />
+    <Footer />
   </div>
 </template>
 
+<script>
+import Footer from "./../components/Footer.vue";
+export default {
+  components: {
+    Footer,
+  },
+  // page component definitions
+};
+</script>
 <style lang="scss">
 $red: #b33a39;
 $grey: #657181;
@@ -193,10 +202,12 @@ a {
   color: #fff;
   font-size: 17px;
   font-weight: 500;
-  padding: 20px;
+  padding: 0 20px;
+  line-height: 50px;
   text-decoration: none;
   margin-bottom: 20px;
   border-radius: 30px;
+  border: none;
 }
 
 .d_flex {
