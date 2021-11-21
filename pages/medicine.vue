@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper" id="regular">
-    <h1>飲食及如廁紀錄表</h1>
+  <div class="wrapper" id="medicine">
+    <h1>餵藥及特殊飲食紀錄表</h1>
     <form v-on:submit.prevent="sendMessage">
       <div class="d_flex">
         <div class="W50">
@@ -24,45 +24,17 @@
         </div>
       </div>
       <div class="W100">
+        <div class="d_flex record_item th">
+          <div class="name">貓名</div>
+          <div class="notice">注意事項</div>
+          <div class="done">確認</div>
+        </div>
+
         <div class="d_flex record_item" v-for="cat in formData.catLists">
           <div class="name">{{ cat.name }}</div>
-          <div class="detail">
-            <div class="fodder d_flex">
-              <p class="f_blue">乾乾</p>
-              <div>
-                <el-slider
-                  v-model="cat.feed"
-                  :step="25"
-                  :marks="marks"
-                  :show-tooltip="false"
-                >
-                </el-slider>
-              </div>
-            </div>
-            <div class="can d_flex">
-              <p class="f_blue">罐頭</p>
-              <div>
-                <el-slider
-                  v-model="cat.can"
-                  :step="25"
-                  :marks="marks"
-                  :show-tooltip="false"
-                >
-                </el-slider>
-              </div>
-            </div>
-            <div class="excretion d_flex">
-              <div class="W50 d_flex j_start mb0">
-                <p class="f_blue">尿</p>
-                <div>
-                  <input type="checkbox" v-model="cat.urine" id="" />
-                </div>
-              </div>
-              <div class="W50 d_flex j_start mb0">
-                <p class="f_blue">屎</p>
-                <input type="checkbox" v-model="cat.feces" id="" />
-              </div>
-            </div>
+          <div class="notice">{{ cat.notice }}</div>
+          <div class="done">
+            <input type="checkbox" v-model="cat.done" id="" />
           </div>
         </div>
       </div>
@@ -99,10 +71,10 @@
         </button>
         <NuxtLink
           class="f_red"
-          :to="{ name: 'regular', query: { date: formData.date } }"
+          :to="{ name: 'medicine', query: { date: formData.date } }"
           >看前班紀錄</NuxtLink
         >
-        <NuxtLink class="f_red" to="/medicine">前往餵藥及特殊飲食須知</NuxtLink>
+        <NuxtLink class="f_red" to="/regular">前往飲食及便便紀錄</NuxtLink>
       </div>
     </form>
   </div>
@@ -158,13 +130,10 @@ export default {
         date: "",
         time: "",
         catLists: {
-          0: { name: "大哥", feed: 0, can: 0, feces: false, urine: false },
-          1: { name: "噗噗", feed: 0, can: 0, feces: false, urine: false },
-          2: { name: "亮亮", feed: 0, can: 0, feces: false, urine: false },
-          3: { name: "冬瓜", feed: 0, can: 0, feces: false, urine: false },
-          4: { name: "蛋蛋", feed: 0, can: 0, feces: false, urine: false },
-          5: { name: "烏魯木", feed: 0, can: 0, feces: false, urine: false },
-          6: { name: "大樹", feed: 0, can: 0, feces: false, urine: false },
+          0: { name: "全員", notice: "貓砂全倒", done: false },
+          1: { name: "蛙蛙", notice: "給腸胃處方", done: false },
+          2: { name: "冬瓜", notice: "禁罐頭", done: false },
+          3: { name: "冬瓜", notice: "冬瓜皮膚藥袋", done: false },
         },
         desc: "",
         member: "",
@@ -210,15 +179,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#regular {
+#medicine {
   a {
     display: block;
   }
 }
 
-.excretion {
-  .d_flex {
-    align-items: center;
+.record_item {
+  padding: 5px 0;
+}
+
+.th {
+  background-color: #6da2c2;
+  line-height: 40px;
+  padding: 0;
+
+  div {
+    color: #fff;
+    text-align: center;
+    padding: 0;
   }
+  .notice,
+  .done {
+    border-left: 1px solid #fff;
+  }
+}
+.notice {
+  width: calc(100% - 135px);
+  text-align: left;
+  padding: 0 10px;
+}
+.done {
+  width: 60px;
 }
 </style>
