@@ -24,44 +24,81 @@
         </div>
       </div>
       <div class="W100">
-        <div class="d_flex record_item" v-for="cat in formData.catLists">
+        <div
+          class="d_flex record_item"
+          :key="cat.name"
+          v-for="(cat, index) in formData.catLists"
+        >
           <div class="name">{{ cat.name }}</div>
           <div class="detail">
-            <div class="fodder d_flex">
-              <p class="f_blue">乾乾</p>
-              <div>
-                <el-slider
+            <div class="feed food d_flex">
+              <p class="f_blue">食物</p>
+              <div class="d_flex">
+                <el-checkbox
                   v-model="cat.feed"
+                  @change="(e) => foodHandler('feed', index)"
+                  >乾</el-checkbox
+                >
+                <el-slider
+                  v-model="cat.feed_detail"
                   :step="25"
                   :marks="marks"
                   :show-tooltip="false"
+                  :disabled="!cat.feed"
                 >
                 </el-slider>
               </div>
             </div>
-            <div class="can d_flex">
-              <p class="f_blue">罐頭</p>
-              <div>
-                <el-slider
+            <div class="can food d_flex">
+              <p class="f_blue"></p>
+              <div class="d_flex">
+                <el-checkbox
                   v-model="cat.can"
+                  @change="(e) => foodHandler('can', index)"
+                  >罐</el-checkbox
+                >
+                <el-slider
+                  v-model="cat.can_detail"
                   :step="25"
                   :marks="marks"
                   :show-tooltip="false"
+                  :disabled="!cat.can"
                 >
                 </el-slider>
               </div>
             </div>
             <div class="excretion d_flex">
-              <div class="W50 d_flex j_start mb0">
+              <p class="f_blue">排泄</p>
+              <div class="d_flex">
+                <div class="W40 d_flex">
+                  <el-checkbox v-model="cat.urine">尿</el-checkbox>
+                  <el-checkbox
+                    v-model="cat.feces"
+                    @change="(e) => fecesHandler(e, index)"
+                    >便</el-checkbox
+                  >
+                </div>
+                <div class="W60 d_flex">
+                  <el-radio-group v-model="cat.feces_warning">
+                    <el-radio :label="'正常'" :disabled="!cat.feces"
+                      >正常</el-radio
+                    >
+                    <el-radio :label="'軟'" :disabled="!cat.feces"
+                      >軟便</el-radio
+                    >
+                    <el-radio :label="'拉稀'" :disabled="!cat.feces"
+                      >拉稀</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </div>
+
+              <!-- <div class="W50 d_flex j_start mb0">
                 <p class="f_blue">尿</p>
                 <div>
                   <input type="checkbox" v-model="cat.urine" id="" />
                 </div>
-              </div>
-              <div class="W50 d_flex j_start mb0">
-                <p class="f_blue">屎</p>
-                <input type="checkbox" v-model="cat.feces" id="" />
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -158,13 +195,74 @@ export default {
         date: "",
         time: "",
         catLists: {
-          0: { name: "大哥", feed: 0, can: 0, feces: false, urine: false },
-          1: { name: "噗噗", feed: 0, can: 0, feces: false, urine: false },
-          2: { name: "亮亮", feed: 0, can: 0, feces: false, urine: false },
-          3: { name: "冬瓜", feed: 0, can: 0, feces: false, urine: false },
-          4: { name: "蛋蛋", feed: 0, can: 0, feces: false, urine: false },
-          5: { name: "烏魯木", feed: 0, can: 0, feces: false, urine: false },
-          6: { name: "大樹", feed: 0, can: 0, feces: false, urine: false },
+          0: {
+            name: "大哥",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            feces_warning: null,
+            urine: false,
+          },
+          1: {
+            name: "噗噗",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            feces_warning: null,
+            urine: false,
+          },
+          2: {
+            name: "亮亮",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            feces_warning: null,
+            urine: false,
+          },
+          3: {
+            name: "冬瓜",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            feces_warning: null,
+            urine: false,
+          },
+          4: {
+            name: "蛋蛋",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            feces_warning: null,
+            urine: false,
+          },
+          5: {
+            name: "烏魯木",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            urine: false,
+          },
+          6: {
+            name: "大樹",
+            feed: true,
+            feed_detail: 0,
+            can: false,
+            can_detail: 0,
+            feces: null,
+            urine: false,
+          },
         },
         desc: "",
         member: "",
@@ -174,10 +272,13 @@ export default {
   created() {},
   beforeMount() {
     const {
-      query: { date },
+      query: { date, time },
     } = this.$route;
     if (!date) {
       this.formData.date = new Date();
+    }
+    if (!time) {
+      this.formData.time = new Date().getHours() > 15 ? "晚班" : "早班";
     }
   },
   updated() {
@@ -185,6 +286,16 @@ export default {
   },
   mounted() {},
   methods: {
+    fecesHandler(e, index) {
+      this.formData.catLists[index].feces_warning = e ? "正常" : null;
+    },
+    foodHandler(type, index) {
+      if (type === "can") {
+        this.formData.catLists[index].can_detail = 0;
+        return;
+      }
+      this.formData.catLists[index].feed_detail = 0;
+    },
     sendMessage() {
       this.loading = true;
       this.$axios
@@ -214,11 +325,54 @@ export default {
   a {
     display: block;
   }
-}
 
-.excretion {
-  .d_flex {
-    align-items: center;
+  .el-slider {
+    &.disabled {
+      opacity: 0.5;
+      .el-slider__marks-text {
+        color: #bbb;
+      }
+    }
+  }
+
+  .detail {
+    .food {
+      .el-slider {
+        width: calc(100% - 60px);
+        transform: translate(0, -6px);
+      }
+
+      .el-checkbox {
+        width: 40px;
+      }
+    }
+  }
+
+  .can {
+    .el-radio-group {
+      width: calc(100% - 40px) !important;
+    }
+  }
+  .excretion {
+    > .d_flex {
+      justify-content: start;
+    }
+    .W40 {
+      justify-content: start;
+      padding-top: 10px;
+      width: 80px;
+    }
+    .W60 {
+      padding-top: 10px;
+      width: calc(100% - 80px);
+      .el-radio-group {
+        justify-content: start;
+        width: 100%;
+        > label {
+          width: 45px;
+        }
+      }
+    }
   }
 }
 </style>

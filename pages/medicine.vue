@@ -30,7 +30,11 @@
           <div class="done">確認</div>
         </div>
 
-        <div class="d_flex record_item" v-for="cat in formData.catLists">
+        <div
+          class="d_flex record_item"
+          :key="cat.notice"
+          v-for="cat in formData.catLists"
+        >
           <div class="name">{{ cat.name }}</div>
           <div class="notice">{{ cat.notice }}</div>
           <div class="done">
